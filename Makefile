@@ -43,6 +43,10 @@ ifeq ($(MAKECMDGOALS),dbg)
 	DEBUG_LEVEL=2
 endif
 
+ifeq ($(MAKECMDGOALS),dbg-install)
+	DEBUG_LEVEL=2
+endif
+
 ifeq ($(MAKECMDGOALS),clean)
 	DEBUG_LEVEL=0
 endif
@@ -1334,6 +1338,13 @@ install-shared: install-headers $(SHARED4)
 # install static by default + install shared if it exists
 install: install-static
 	[ -e $(SHARED4) ] && $(MAKE) install-shared || :
+
+dbg-install: dbg $(SHARED) install-static install-shared install-tools
+
+install-tools: tools
+	install -d $(INSTALL_PATH)/bin
+	install -C -m 755 $(TOOLS) $(INSTALL_PATH)/bin
+
 
 #-------------------------------------------------
 
